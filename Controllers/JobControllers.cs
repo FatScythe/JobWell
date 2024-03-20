@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace server.Controllers
 {
@@ -6,13 +7,14 @@ namespace server.Controllers
     [ApiController]
     public class JobControllers: ControllerBase
     {
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetJobs()
         {
             return Ok("Get All Jobs");
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetJob()
         {
             return Ok("Get Single Jobs");
