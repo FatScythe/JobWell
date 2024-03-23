@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using server.Dto.Job;
+using server.Interface;
+using server.Mappers;
+using server.Models;
 
 namespace server.Controllers
 {
@@ -7,35 +13,88 @@ namespace server.Controllers
     [ApiController]
     public class JobControllers: ControllerBase
     {
-        [HttpGet, Authorize]
-        public async Task<IActionResult> GetJobs()
+        private readonly IJobRepository _jobRepo;
+        private readonly UserManager<Account> _userManager;
+        public JobControllers(IJobRepository jobRepository, UserManager<Account> userManager)
         {
-            return Ok("Get All Jobs");
+            _jobRepo = jobRepository;
+            _userManager = userManager;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Job>>> GetJobs()
+        {
+            var jobs = await _jobRepo.GetAllJobs();
+
+            return Ok(new { isSuccess = true, jobs });
         }
 
         [HttpGet("{id:int}")]
-        [Authorize]
-        public async Task<IActionResult> GetJob()
+        public async Task<ActionResult<Job>> GetJob(int id)
         {
-            return Ok("Get Single Jobs");
+            if (id <= 0)
+                return BadRequest(new {isSuccess = false, message= "Please provide a valid job id"});
+
+            var job = await _jobRepo.GetJobById(id);
+
+            if (job is null)
+                return NotFound(new { isSuccess = false, message = $"Job with id {id} was not found" });
+
+
+            return Ok(new {isSuccess = true, job });
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateJob()
+        [Authorize]
+        public async Task<IActionResult> CreateJob(CreateJobDto createJob)
         {
-            return Ok("Create Job");
+            if (createJob is null)
+               return BadRequest(new { isSuccess = false, message = "Please provide fields" });
+
+            if (!ModelState.IsValid)
+                return BadRequest(new { isSuccess = false, message = "Please fill all fields", error = ModelState });
+
+            var job = await _jobRepo.CreateJob(createJob.ToJobFromCreateDto());
+
+            if (job is null)
+                return StatusCode(500, new { isSuccess = false, message = "Something went wrong" });
+
+            return CreatedAtAction(nameof(GetJob), new { id = job.Id }, new { isSuccess = true, job });
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateJob()
+        [Authorize]
+        public async Task<IActionResult> UpdateJob(int id,[FromBody] UpdateJobDto updateJob)
         {
-            return Ok("Update Job");
+            if (id <= 0)
+                return BadRequest(new { isSuccess = false, message = "Please provide a valid job id" });
+
+            if (updateJob is null)
+                return BadRequest(new { isSuccess = false, message = "Please provide update fields" });
+
+            if (!ModelState.IsValid)
+                return BadRequest(new { isSuccess = false, message = "Please fill all fields", error = ModelState });
+
+            var job = await _jobRepo.UpdateJob(id, updateJob);
+
+            if (job is null)
+                return NotFound(new { isSuccess = false, message = $"Job with id {id} was not found" });
+
+            return Ok(new {isSuccess = true, message = "Job updated", job });
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteJob()
+        [HttpDelete("{id:int}"), Authorize]
+        public async Task<IActionResult> DeleteJob([FromRoute] int id)
         {
-            return NoContent();        
+            if (id <= 0)
+                return BadRequest(new { isSuccess = false, message = "Please provide a valid job id" });
+
+            var job = await _jobRepo.DeleteJobById(id);
+
+            if (job is null)
+                return NotFound(new { isSuccess = false, message = $"Job with id {id} was not found" });
+
+            return Ok(new { isSuccess = true, message = "Job deleted", job });
         }
     }
 }

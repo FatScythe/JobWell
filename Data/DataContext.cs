@@ -10,8 +10,8 @@ namespace server.Data
         { 
         
         }
-        DbSet<Application> Applications { get; set; }
-        DbSet<Job> Jobs { get; set; }
+        public DbSet<Application> Applications { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
 
     }
