@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using server.Dto.Job;
+using server.Extensions;
 using server.Interface;
 using server.Mappers;
 using server.Models;
+using System.Security.Claims;
 
 namespace server.Controllers
 {
@@ -22,11 +24,14 @@ namespace server.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<Job>>> GetJobs()
         {
             var jobs = await _jobRepo.GetAllJobs();
+            var userInfo = User.GetCurrentUserInfo();
+            var userId = _userManager.GetUserId(User);  
 
-            return Ok(new { isSuccess = true, jobs });
+            return Ok(new { isSuccess = true, jobs, userInfo, userId });
         }
 
         [HttpGet("{id:int}")]

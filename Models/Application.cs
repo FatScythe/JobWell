@@ -18,6 +18,8 @@ namespace server.Models
         public DateOnly DoB { get; set; }
         public string Address { get; set; }
         public string Resume { get; set; }
+        public string AccountId { get; set; }
+        public Account Account { get; set; }
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
