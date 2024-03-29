@@ -21,17 +21,17 @@ namespace server.Data
             {
                 new IdentityRole()
                 {
-                    Name = "admin",
+                    Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
                 new IdentityRole()
                 {
-                    Name = "employee",
+                    Name = "Employee",
                     NormalizedName =  "EMPLOYEE"
                 }, 
                 new IdentityRole()
                 {
-                    Name = "employer",
+                    Name = "Employer",
                     NormalizedName = "EMPLOYER",
                 }
             };

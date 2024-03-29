@@ -51,20 +51,20 @@ namespace server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f27f956a-6989-4860-9f29-18ef0fdaa354",
-                            Name = "admin",
+                            Id = "8421b985-6069-4498-84ed-e218b1ee55a4",
+                            Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3a955ba8-fc94-4e72-84e9-962a3f8e60fa",
-                            Name = "employee",
+                            Id = "d9c17724-2e57-4693-8e85-a92acd17d4e5",
+                            Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "8564a8aa-e543-45e4-b5df-bb35ff586af9",
-                            Name = "employer",
+                            Id = "5f71129d-b39c-4281-b322-fd74fcd7e333",
+                            Name = "Employer",
                             NormalizedName = "EMPLOYER"
                         });
                 });
@@ -199,6 +199,10 @@ namespace server.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)

@@ -32,6 +32,7 @@ namespace server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -213,9 +214,9 @@ namespace server.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3a955ba8-fc94-4e72-84e9-962a3f8e60fa", null, "employee", "EMPLOYEE" },
-                    { "8564a8aa-e543-45e4-b5df-bb35ff586af9", null, "employer", "EMPLOYER" },
-                    { "f27f956a-6989-4860-9f29-18ef0fdaa354", null, "admin", "ADMIN" }
+                    { "5f71129d-b39c-4281-b322-fd74fcd7e333", null, "Employer", "EMPLOYER" },
+                    { "8421b985-6069-4498-84ed-e218b1ee55a4", null, "Admin", "ADMIN" },
+                    { "d9c17724-2e57-4693-8e85-a92acd17d4e5", null, "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.CreateIndex(
