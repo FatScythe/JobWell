@@ -20,9 +20,22 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+
+
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<Account>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<DataContext>();
+
+//builder.Services.AddIdentity<Account, IdentityRole>(options =>
+//{
+//    options.Password.RequireDigit = true;
+//    options.Password.RequireLowercase = true;
+//    options.Password.RequireUppercase = true;
+//    options.Password.RequireNonAlphanumeric = true;
+//    options.Password.RequiredLength = 12;
+//    options.User.RequireUniqueEmail = true;
+//}).AddEntityFrameworkStores<DbContext>();
 
 // Add services to the container.
 builder.Services.AddControllers();
