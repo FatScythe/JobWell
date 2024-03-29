@@ -39,8 +39,6 @@ namespace server.Controllers
                     Email = registerDto.Email,
                 };
 
-                
-
                 var createdUser = await _userManager.CreateAsync(account, registerDto.Password);
 
                 if (createdUser.Succeeded)
