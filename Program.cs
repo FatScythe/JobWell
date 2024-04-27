@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using server.Data;
 using server.Interface;
 using server.Models;
@@ -28,6 +27,7 @@ builder.Services.AddIdentityApiEndpoints<Account>()
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 var app = builder.Build();
 
 app.MapIdentityApi<Account>();

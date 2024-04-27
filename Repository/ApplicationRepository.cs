@@ -1,13 +1,24 @@
-﻿using server.Interface;
+﻿using server.Data;
+using server.Interface;
 using server.Models;
 
 namespace server.Repository
 {
     public class ApplicationRepository : IApplicationRepository
     {
-        public Task<Application> CreateApplication(Application application)
+        private readonly DataContext _context;
+        public ApplicationRepository(DataContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<Application> CreateApplicationAsync(Application application)
+        {
+           await _context.Applications.AddAsync(application);
+
+            if (_context.SaveChanges() < 1)
+                return null;
+
+            return application;
         }
 
         public Task<Application> DeleteApplicationById(int applicationId)

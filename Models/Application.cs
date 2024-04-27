@@ -20,6 +20,8 @@ namespace server.Models
         public string Resume { get; set; }
         public string AccountId { get; set; }
         public Account Account { get; set; }
+        public int JobId { get; set; }
+        public Job Job {get; set;}
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
