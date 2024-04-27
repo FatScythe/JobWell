@@ -2,15 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using server.Dto.Job;
-using server.Extensions;
 using server.Interface;
 using server.Mappers;
 using server.Models;
-using System.Data;
 
 namespace server.Controllers
 {
-    [Route("/api/v1/jobs")]
+    [Route("/api/v1/job")]
     [ApiController]
     public class JobControllers: ControllerBase
     {
