@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Dto;
 using server.Interface;
 using server.Models;
 using server.Repository;
@@ -28,6 +29,8 @@ builder.Services.AddIdentityApiEndpoints<Account>()
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<ServiceResponse>();
+
 var app = builder.Build();
 
 app.MapIdentityApi<Account>();
