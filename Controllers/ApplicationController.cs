@@ -18,10 +18,18 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetUserApplications()
         {
-            return Ok("Get user application");
+            var user = User.GetCurrentUserInfo();
+            var result = await _appRepo.GetApplications(user.Id);
+
+            if (result.Result is null)
+            {
+                return StatusCode(result.StatusCode, new { success = false, message = result.Message });
+            }
+
+            return Ok(new { success = true, applications = result.Result });
         }
 
         [HttpGet("{id}")]
@@ -58,14 +66,14 @@ namespace server.Controllers
                 JobId = applicationDto.JobId
             };
 
-            var createdApp = await _appRepo.CreateApplicationAsync(application);
+            var result = await _appRepo.CreateApplicationAsync(application);
 
-            if(createdApp is null)
+            if(result.Result is null)
             {
-                return StatusCode(500, new { success = false, message = "Something went wrong" });
+                return StatusCode(result.StatusCode, new { success = false, message = result.Message });
             }
 
-            return CreatedAtAction(nameof(GetSingleUserApplications), new { id = createdApp.Id }, new { success = true, application = createdApp });
+            return CreatedAtAction(nameof(GetSingleUserApplications), new { id = application.Id }, new { success = true, application = result.Result });
         }
 
         [HttpPut("{id}")]
