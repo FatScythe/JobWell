@@ -12,7 +12,6 @@ namespace server.Extensions
             var role = principal.FindFirst(ClaimTypes.Role).Value; // will give user role
             var email = principal.FindFirstValue(ClaimTypes.Email); // will give the user's Email
 
-
             return new CurrentUserDto()
             {
                 Id = id,

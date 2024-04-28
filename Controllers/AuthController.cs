@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using server.Dto.Account;
 using server.Extensions;
 using server.Models;
@@ -14,7 +13,11 @@ namespace server.Controllers
     {
         private readonly SignInManager<Account> _signInManager;
         private readonly UserManager<Account> _userManager;
-        public AuthController(SignInManager<Account> signInManager, UserManager<Account> userManager)
+
+        public AuthController(
+            SignInManager<Account> signInManager, 
+            UserManager<Account> userManager
+            )
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -70,7 +73,6 @@ namespace server.Controllers
         public ActionResult GetCurrentUserInfo()
         {
             var user = User.GetCurrentUserInfo();
-
             return Ok(new {success = true, user});
         }
 
