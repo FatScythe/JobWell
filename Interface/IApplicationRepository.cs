@@ -6,9 +6,9 @@ namespace server.Interface
     public interface IApplicationRepository
     {
         Task<ServiceResponse> GetApplications(string userId);
-        Task<ServiceResponse> GetApplicationById(int applicationId);
+        Task<ServiceResponse> GetApplicationById(string applicationId);
         Task<ServiceResponse> CreateApplicationAsync(Application application);
-        Task<ServiceResponse> UpdateApplicationId(Application application);
-        Task<ServiceResponse> DeleteApplicationById(int applicationId);
+        Task<ServiceResponse> UpdateApplicationById(string applicationId, Application application);
+        Task<ServiceResponse> DeleteApplicationById(string applicationId);
     }
 }

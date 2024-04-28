@@ -34,10 +34,16 @@ namespace server.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetSingleUserApplications(int id)
+        public async Task<IActionResult> GetSingleUserApplications([FromRoute]string id)
         {
+            var result = await _appRepo.GetApplicationById(id);
 
-            return Ok("Get single user application");
+            if (result.Result is null)
+            {
+                return StatusCode(result.StatusCode, new { success = false, message = result.Message });
+            }
+
+            return Ok(new { success = true, application = result.Result });
         }
 
         [HttpPost]

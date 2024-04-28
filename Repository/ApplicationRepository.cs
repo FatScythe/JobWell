@@ -37,16 +37,6 @@ namespace server.Repository
             return _response;
         }
 
-        public Task<Application> DeleteApplicationById(int applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Application>> GetApplicationById(int applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ServiceResponse> GetApplications(string userId)
         {
             var applications = await _context.Applications.Where(app => app.AccountId == userId).ToListAsync();
@@ -58,22 +48,32 @@ namespace server.Repository
             return _response;
         }
 
-        public Task<Application> UpdateApplicationId(Application application)
+        public async Task<ServiceResponse> GetApplicationById(string applicationId)
+        {
+            var application = await _context.Applications.Where(app => app.Id == applicationId).FirstOrDefaultAsync();
+
+            if (application is null)
+            {
+                _response.StatusCode = 404;
+                _response.Message = $"Application with id: {applicationId} was not found";
+                _response.Result = null;
+
+                return _response;
+            }
+
+            _response.StatusCode = 200;
+            _response.Message = "User Application";
+            _response.Result = application;
+
+            return _response;
+        }
+
+        public async Task<ServiceResponse> DeleteApplicationById(string applicationId)
         {
             throw new NotImplementedException();
         }
 
-        Task<ServiceResponse> IApplicationRepository.DeleteApplicationById(int applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResponse> IApplicationRepository.GetApplicationById(int applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ServiceResponse> IApplicationRepository.UpdateApplicationId(Application application)
+        public async Task<ServiceResponse> UpdateApplicationById(string applicationId, Application application)
         {
             throw new NotImplementedException();
         }
