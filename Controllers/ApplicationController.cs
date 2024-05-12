@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Dto.Application;
 using server.Extensions;
 using server.Interface;
+using server.Mappers;
 using server.Models;
 
 namespace server.Controllers
@@ -62,7 +63,7 @@ namespace server.Controllers
                 FirstName = applicationDto.FirstName,
                 LastName  = applicationDto.LastName,
                 MiddleName = applicationDto.MiddleName,
-                Email = user.Email,
+                Email = applicationDto?.Email ?? user.Email,
                 Gender = applicationDto.Gender,
                 Address = applicationDto.Address,
                 Mobile = applicationDto.Mobile,
@@ -82,11 +83,23 @@ namespace server.Controllers
             return CreatedAtAction(nameof(GetSingleUserApplications), new { id = application.Id }, new { success = true, application = result.Result });
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{applicationId}")]
         [Authorize]
-        public async Task<IActionResult> EditApplication()
+        public async Task<IActionResult> EditApplication([FromRoute] string applicationId, [FromBody] UpdateApplicationDto updateApplicationDto)
         {
-            return Ok("Edit single Job application");
+            if (updateApplicationDto is null)
+            {
+                return BadRequest("Please provide an application");
+            }
+
+            var result = await _appRepo.UpdateApplicationById(applicationId, updateApplicationDto.ToApplicationFromUpdateAppDto());
+
+            if (result.Result is null)
+            {
+                return StatusCode(result.StatusCode, new { success = false, message = result.Message });
+            }
+
+            return Ok(new { success = true, message = "Application updated", application = result.Result });
         }
 
         [HttpDelete("{id}")]
