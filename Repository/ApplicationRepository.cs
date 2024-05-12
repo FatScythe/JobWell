@@ -67,15 +67,72 @@ namespace server.Repository
 
             return _response;
         }
+        public async Task<ServiceResponse> UpdateApplicationById(string applicationId, Application updateApp)
+        {
+            var application = await _context.Applications.Where(app => app.Id == applicationId).FirstOrDefaultAsync();
+
+            if (application is null)
+            {
+                _response.StatusCode = 404;
+                _response.Message = $"Application with id: {applicationId} was not found";
+                _response.Result = null;
+
+                return _response;
+            }
+
+            application.FirstName = updateApp.FirstName;
+            application.LastName = updateApp.LastName;
+            application.Email = updateApp.Email;
+            application.MiddleName = updateApp.MiddleName;
+            application.Address = updateApp.Address;
+            application.Mobile = updateApp.Mobile;
+            application.Resume = updateApp.Resume;
+            application.DoB = updateApp.DoB;
+            application.Gender = updateApp.Gender;
+            application.UpdatedAt = DateTime.Now;
+
+            if(await _context.SaveChangesAsync() < 1)
+            {
+                _response.StatusCode = 500;
+                _response.Message = "Something went wrong, unable to update application";
+                _response.Result = null;
+            }
+
+            _response.StatusCode = 200;
+            _response.Message = "Application updated";
+            _response.Result = application;
+
+            return _response;
+        }
 
         public async Task<ServiceResponse> DeleteApplicationById(string applicationId)
         {
-            throw new NotImplementedException();
+            var application = await _context.Applications.FindAsync(applicationId);
+
+            if (application is null)
+            {
+                _response.StatusCode = 404;
+                _response.Message = $"Application with id: {applicationId} was not found";
+                _response.Result = null;
+
+                return _response;
+            }
+
+            _context.Applications.Remove(application);
+
+            if (await _context.SaveChangesAsync() < 1)
+            {
+                _response.StatusCode = 500;
+                _response.Message = "Something went wrong, unable to delete applcation";
+                _response.Result = null;
+            }
+
+            _response.StatusCode = 200;
+            _response.Message = "Application updated";
+            _response.Result = application;
+
+            return _response;
         }
 
-        public async Task<ServiceResponse> UpdateApplicationById(string applicationId, Application application)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

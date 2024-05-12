@@ -104,9 +104,16 @@ namespace server.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteApplication()
+        public async Task<IActionResult> DeleteApplication([FromRoute] string id)
         {
-            return Ok("Delete single Job application");
+            var result = await _appRepo.DeleteApplicationById(id);
+
+            if (result.Result is null)
+            {
+                return StatusCode(result.StatusCode, new { success = false, message = result.Message });
+            }
+
+            return Ok(new { success = true, message = "Application deleted" });
         }
     }
 }
